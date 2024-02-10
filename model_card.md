@@ -19,5 +19,3 @@ the metrics were achieved: Precision: 0.7741 | Recall: 0.6481 | F1: 0.7055
 The model uses slices to evaluate the data, which is saved as "slice_output.txt".  Reviewing this data for strong Precision, Recall, and F1 scores may lead to a discriminatory basis.
 ## Caveats and Recommendations
 A previous Udacity Project, “Supervised Learning: Project: Finding Donors for *CharityML*” required using 3 different models to compare the outcomes using this same data set. During this project, I used LinearSVC, AdaBoostClassifier, and KNeighborClassifer. The metrics comparing these models showed AdaBoostClassifier achieved a better F1 and accuracy score. Using this information, I used the AdaBoostClassifier model.  
-
-The model has markdown abilities to export a csv file of the "slice_output.txt" to allow for closer review an analysis. 
