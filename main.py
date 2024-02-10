@@ -26,24 +26,28 @@ class Data(BaseModel):
     hours_per_week: int = Field(..., example=40, alias="hours-per-week")
     native_country: str = Field(..., example="United-States", alias="native-country")
 
-path = # TODO: enter the path for the saved encoder 
+
+project_path = os.getcwd()
+
+# Path to oepn the Encoder
+path = os.path.join(project_path, "model", "encoder.pkl") 
 encoder = load_model(path)
 
-path = # TODO: enter the path for the saved model 
+# Path to oepn the Model 
+path = os.path.join(project_path, "model", "model.pkl") 
 model = load_model(path)
 
-# TODO: create a RESTful API using FastAPI
-app = # your code here
+# create a RESTful API using FastAPI
+app = FastAPI()
 
-# TODO: create a GET on the root giving a welcome message
+# create a GET on the root giving a welcome message
 @app.get("/")
 async def get_root():
     """ Say hello!"""
-    # your code here
-    pass
+    return {"Message": "You've successfully connected. Welcome to API!"}
 
 
-# TODO: create a POST on a different path that does model inference
+# create a POST on a different path that does model inference
 @app.post("/data/")
 async def post_inference(data: Data):
     # DO NOT MODIFY: turn the Pydantic model into a dict.
@@ -64,11 +68,14 @@ async def post_inference(data: Data):
         "sex",
         "native-country",
     ]
+    # Process Data to determine the salary threshold. 
+    
     data_processed, _, _, _ = process_data(
-        # your code here
-        # use data as data input
-        # use training = False
-        # do not need to pass lb as input
-    )
-    _inference = # your code here to predict the result using data_processed
-    return {"result": apply_label(_inference)}
+        data,
+        categorical_features=cat_features,
+        training=False,    
+        encoder=encoder,
+        )
+
+    _inference = inference(model, data_processed)
+    return {"Results": apply_label(_inference)}
