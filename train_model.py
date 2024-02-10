@@ -80,17 +80,6 @@ print(f"Precision: {p:.4f} | Recall: {r:.4f} | Accuracy: {a:.4f} | F1: {fb:.4f}"
 # Compute the performance on model slices using the ml/model.py: performance_on_categorical_slice function
 # iterate through the categorical features
 
-#Creating empty lists to create dataframe of related information
-colList = []
-sliceList = []
-countList = []
-PrecList = []
-RecallList = []
-F1List = []
-AccList = []
-# END
-
-
 for col in cat_features:
     # iterate through the unique values in one categorical feature
     for slicevalue in sorted(test[col].unique()):
@@ -105,27 +94,12 @@ for col in cat_features:
             lb = lb, 
             model = model
 
-            # Is the Column_name and Label the same???
-            # use test, col and slicevalue as part of the input
             )
         
-        # Adding information to seperate lists
-        colList.append(col)
-        sliceList.append(slicevalue)
-        countList.append(count)
-        PrecList.append(p)
-        RecallList.append(r)
-        F1List.append(fb)
-        AccList.append(a)
-        ## END 
 
         with open("slice_output.txt", "a") as f:
             print(f"{col}: {slicevalue}, Count: {count:,}", file=f)
             print(f"Precision: {p:.4f} | Recall: {r:.4f} | Accuracy: {a:.4f} | F1: {fb:.4f}", file=f)
 
 
-## Creating a Dataframe of above information to allow for easier review and analysis.
-dct = {'ColumnName':colList, 'SliceValue':sliceList, 'SliceCount':countList, 'Precision':PrecList, 'Recall':RecallList, 'Accuracy':AccList, 'F1':F1List}
-df = pd.DataFrame(dct)
-df.to_csv('slice_output.csv')
-## END 
+
