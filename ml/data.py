@@ -71,7 +71,7 @@ def process_data(
 
 def apply_label(inference):
     """ Convert the binary label in a single inference sample into string output."""
-    print("ml/Data: apply_label executed")
+    
     if inference[0] == 1:
         return ">50K"
     elif inference[0] == 0:

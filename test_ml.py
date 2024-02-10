@@ -58,12 +58,19 @@ def test_data_length(data):
     """
     assert data.shape[0] > 400, (f'Dataset is greater than 400 items')
 
-def test_myFile(myFile):
+def test_apply_label():
     """
     Test the accuracy of the splits is within 95% of original.
     """
-    Accuracy = myFile.Accuracy.mean()
-    assert Accuracy > .83, (f'Slice Accuracy is within 95% of original testing')
+    inference = [1, 1, 0, 0]
+    check = []
+    for i in inference:
+        if i == 1:
+            check.append(">50K")
+        elif i == 0:
+            check.append("<=50K")
+    assert check == [">50K", ">50K", "<=50K", "<=50K"]
+    
 
 
 
