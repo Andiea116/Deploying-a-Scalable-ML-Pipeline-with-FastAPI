@@ -1,12 +1,16 @@
 import pickle
-from sklearn.metrics import fbeta_score, precision_score, recall_score
+import os
+import pytest
+from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score
 from ml.data import process_data
-# TODO: add necessary import
-from sklearn.linear_model import LogisticRegression  #Best model??
+from sklearn.ensemble import AdaBoostClassifier
 from .data import process_data, apply_label
 
 
 # Optional: implement hyperparameter tuning.
+
+
+
 def train_model(X_train, y_train):
     """
     Trains a machine learning model and returns it.
@@ -22,8 +26,9 @@ def train_model(X_train, y_train):
     model
         Trained machine learning model.
     """
-    lr = LogisticRegression(max_iter=1000)
-    model = lr.fit(X_train, y_train)
+    Ada = AdaBoostClassifier(n_estimators=300, learning_rate=1.75, random_state=47) 
+    
+    model = Ada.fit(X_train, y_train)
     return model
 
 
@@ -46,7 +51,8 @@ def compute_model_metrics(y, preds):
     fbeta = fbeta_score(y, preds, beta=1, zero_division=1)
     precision = precision_score(y, preds, zero_division=1)
     recall = recall_score(y, preds, zero_division=1)
-    return precision, recall, fbeta
+    accuracy = accuracy_score(y, preds)
+    return precision, recall, fbeta, accuracy
 
 
 def inference(model, X):
@@ -77,7 +83,6 @@ def save_model(model, path):
     """
     with open(path, 'wb') as file:
         pickle.dump(model, file)
-    print("ml/model:Pickle save_model Completed")
     pass 
 
 def load_model(path):
@@ -85,7 +90,6 @@ def load_model(path):
 
     with open(path, 'rb') as pickle_file:
         content = pickle.load(pickle_file)
-    print("ml/model:load_model Completed")
     return content
 
 
@@ -125,7 +129,7 @@ def performance_on_categorical_slice(
 
     """
 
-    ##column, column feature, where do these go?
+    
     data = data[data[column_name] == slice_value] 
     X_slice, y_slice, _, _ = process_data(
         X = data, 
@@ -136,5 +140,5 @@ def performance_on_categorical_slice(
         lb = lb)
     
     preds = inference(model, X_slice) # get prediction on X_slice using the inference function
-    precision, recall, fbeta = compute_model_metrics(y_slice, preds)
-    return precision, recall, fbeta
+    precision, recall, fbeta, accuracy = compute_model_metrics(y_slice, preds)
+    return precision, recall, fbeta, accuracy
